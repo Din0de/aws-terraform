@@ -1,9 +1,9 @@
 # Create VPC example 100.64.0.0/16
 
 resource "aws_vpc" "vpc-example" {
-  cidr_block           = "100.64.0.0/16"
-  enable_dns_support   = "true"
-  enable_dns_hostnames = "true" # this gives it a public DNS name
+  cidr_block           = var.vpc-cidr #this looks at the tfvars.tf because we made a variable there
+  enable_dns_support   = true         # I put this in quotations before
+  enable_dns_hostnames = true         # this gives it a public DNS name
   tags                 = { Name = "vpc-example" }
 }
 
@@ -18,7 +18,7 @@ resource "aws_internet_gateway" "igw-example" {
 # Create the public subnet
 
 resource "aws_subnet" "public-tf-sn" {
-  cidr_block              = "100.64.1.0/24"
+  cidr_block              = var.pub-cidr
   map_public_ip_on_launch = "true"
   vpc_id                  = aws_vpc.vpc-example.id
   availability_zone       = "us-east-1a"
@@ -28,7 +28,7 @@ resource "aws_subnet" "public-tf-sn" {
 # Create the private subnet
 
 resource "aws_subnet" "private-tf-sn" {
-  cidr_block        = "100.64.2.0/24"
+  cidr_block        = var.priv-cidr
   vpc_id            = aws_vpc.vpc-example.id
   availability_zone = "us-east-1b"
   tags              = { Name = "private-tf-sn" }
@@ -99,8 +99,8 @@ resource "aws_vpc_security_group_egress_rule" "all-outbond" {
 # Finally make your instance
 
 resource "aws_instance" "ec2-terraformed" {
-  ami               = "ami-0ac4dfaf1c5c0cce9"
-  instance_type     = "t2.micro"
+  ami               = data.aws_ami.latest_ami.id
+  instance_type     = var.chassis
   subnet_id         = aws_subnet.public-tf-sn.id
   security_groups   = [aws_security_group.sg-tf.id]
   availability_zone = "us-east-1a"

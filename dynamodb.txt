@@ -1,3 +1,5 @@
+# CHANGE THIS TO A .TF FILE TYPE AND YOU CAN USE IT FOR DYNAMODB
+
 resource "aws_dynamodb_table" "table_example" {
   name           = "table-example"
   billing_mode   = "PROVISIONED"

@@ -106,4 +106,3 @@ resource "aws_instance" "ec2-terraformed" {
   tags              = { Name = "ec2-terraformed" }
   user_data         = file("userdata.sh")
 }
-

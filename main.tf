@@ -88,11 +88,9 @@ resource "aws_vpc_security_group_ingress_rule" "allow-hhtp" {
 
 # Egress all outbound rule for security group 
 
-resource "aws_vpc_security_group_egress_rule" "all-outbond" {
+resource "aws_vpc_security_group_egress_rule" "all-outbound" {
   security_group_id = aws_security_group.sg-tf.id
   cidr_ipv4         = "0.0.0.0/0"
-  from_port         = 80
-  to_port           = 80
   ip_protocol       = "-1"
 }
 
@@ -108,3 +106,4 @@ resource "aws_instance" "ec2-terraformed" {
   tags              = { Name = "ec2-terraformed" }
   user_data         = file("userdata.sh")
 }
+
